@@ -1,0 +1,25 @@
+@charset "UTF-8";
+#MobSlider{
+	height: 200px;
+	width: 100%;
+	overflow: hidden;
+	ul,li{
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		width: 100%;
+		height: 100%;
+	}
+	ul{
+		position: relative;
+	}
+	li{
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-color: #fff;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+}
