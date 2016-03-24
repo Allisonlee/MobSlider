@@ -9,6 +9,7 @@ var MobSlider = (function(){
 		MS_Reset = false,// 根据此判断是否被初始化
 		MS_Paged = 0,
 		MS_Layer = '',
+		MS_Rolls = '',
 		MS_Num   = 0,
 		MS_Swipe = false // 滚动的方向,默认false左滚,true 右滚
 		MS_Speed = 200; // 滚动速度
@@ -133,7 +134,7 @@ var MobSlider = (function(){
 	}
 	var MSReset = function(MS){
 		MS_Width = MS.width();
-		if(!MS_Reset){
+		if(!MS_Reset){ // 如果还未初始化
 			// 首末元素拷贝
 			var MS_AF_el = MS.find('li').eq(0),
 				MS_BF_el= MS.find('li').last();
@@ -143,6 +144,7 @@ var MobSlider = (function(){
 				// 设置对应CLASS
 			MS.find('li').eq(0).addClass('MS_bf');
 			MS.find('li').last().addClass('MS_af');
+			MS_Paged = 0;
 			MS_Reset = true;
 		}
 		// 排列元素
@@ -153,12 +155,13 @@ var MobSlider = (function(){
 		});
 		// 获取数量
 		MS_Num = MS.find('li').length;
+		// 设置rolls
+		MSRolls(MS);
 	}
 	var MSMove = function(MS){
 		var moveleft = MS_Paged * MS_Width;
 		MS_Layer.animate({left:moveleft},MS_Speed,function(){
 			// 运行完动画后判断是否需要回到对应页面
-			// console.log(MS_Paged);
 			if(MS_Paged == 1){
 				MS_Paged = 0 - (MS_Num - 3);
 			}else if(MS_Paged == 0 - (MS_Num - 2)){
@@ -168,8 +171,31 @@ var MobSlider = (function(){
 			MS_Layer.css({
 				left: MS_Paged * MS_Width
 			});
+			// 设置圆点
+			MSRolls(MS);
 		});
 	}
+	// 设置圆点位置
+	var MSRolls = function(MS){
+		if(MS_Reset){
+			MS.find('.rolls').remove();
+			MS.append('<div class="rolls"></div>');
+			MS_Rolls = MS.find('.rolls');
+			for (var i = 0; i < MS_Num - 2; i++){
+				MS_Rolls.append('<span></span>');
+			}
+		}
+		MS_Rolls.removeClass('on');
+		MS_Rolls.find('span').each(function(index){
+			if(index == Math.abs(MS_Paged)){
+				$(this).addClass('on');
+			}
+		});
+	}
+	// 设置参数
+	// var MSOption = function(){
+
+	// }
 	return{
 		MSEntry : MSEntry
 	};

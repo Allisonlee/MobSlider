@@ -15,14 +15,17 @@ MobSlider是我为了移动端的轮播（支持PC）而制作的基于jQuery的
 <!-- 加载样式文件 -->
     <link rel="stylesheet" type="text/css" href="css/MobSlider.min.css">
     <script src="jquery.min.js"></script>
+
 <!-- 加载 MobSlider JS -->
     <script src="js/MobSlider.min.js"></script>
+
 <!-- 使用 -->
 <div id="MobSlider">
 	<li style="background-image: url(xxx);"></li>
 	<li style="background-image: url(xxx);"></li>
 	<li style="background-image: url(xxx);"></li>
 </div>
+
 <!-- 注册 -->
 <script>
 	$(document).ready(function(){
@@ -30,6 +33,8 @@ MobSlider是我为了移动端的轮播（支持PC）而制作的基于jQuery的
 	});
 </script>
 ```
+#### 样式修改
+> 请修改SCSS中的 #MobSlider 为你自定的ID,或直接使用这个.
 #### 使用注意
 > li内的内容,请自行修改.
 > 但请务必记得给li添加背景图片.
