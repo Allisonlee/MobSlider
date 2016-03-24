@@ -20,17 +20,30 @@ var MobSlider = (function(){
 		if(!MS_Reset){
 			MSReset(MS);
 		}
-		// 定义事件
-		MS_Layer[0].addEventListener("touchstart",handleStart,false);
-		MS_Layer[0].addEventListener("touchmove",handleMove,false);
-		MS_Layer[0].addEventListener("touchend",handleEnd,false);
-
+		// 定义所需函数
+		var ismouse = false,movewidth,moveplace,nextplace,layerplace,nowpaged,starttime,overtime,allmovewidth;
+		// 加载对应事件
+		if(ismobole()){
+			MS_Layer[0].addEventListener("touchstart",handleStart,false);
+			MS_Layer[0].addEventListener("touchmove",handleMove,false);
+			MS_Layer[0].addEventListener("touchend",handleEnd,false);
+		}else{
+			// move事件在按下鼠标后注册
+			MS_Layer[0].addEventListener("mousedown",handleStart,false);
+			MS_Layer[0].addEventListener("mouseup",handleEnd,false);
+			ismouse = true; // 标注为PC端
+		}
 		// 执行事件
-		var movewidth,moveplace,nextplace,layerplace,nowpaged,starttime,overtime,allmovewidth;
 		function handleStart(ele){
 			// 定义nextplace
-			var touch = ele.touches[0];
-			nextplace = touch.pageX;
+			if(ismouse){
+				nextplace = ele.pageX;
+				// 按下鼠标注册MOVE事件
+				MS_Layer[0].addEventListener("mousemove",handleMove,false);
+			}else{
+				var touch = ele.touches[0];
+				nextplace = touch.pageX;
+			}
 			// 设置开始时间,用于判断速度
 			starttime = Date.now();
 			allmovewidth = 0;
@@ -41,8 +54,12 @@ var MobSlider = (function(){
 			// 获取当前的位置信息
 			layerplace = parseFloat(MS_Layer.css('left'));
 			// Move处理
-			var touch = ele.touches[0];
-			moveplace = touch.pageX;
+			if(ismouse){
+				moveplace = ele.pageX;
+			}else{
+				var touch = ele.touches[0];
+				moveplace = touch.pageX;
+			}
 			movewidth = Math.abs(nextplace - moveplace);
 			if(moveplace > nextplace){
 				// Left
@@ -97,6 +114,21 @@ var MobSlider = (function(){
 				MS_Paged = 0 - (MS_Num - 2);
 			}
 			MSMove(MS);
+			// 弹起鼠标,注销move事件
+			MS_Layer[0].removeEventListener("mousemove",handleMove,false);
+		}
+		// 判断是否为移动端
+		function ismobole(){
+			var userAgentInfo = navigator.userAgent;
+			var Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod");
+			var flag = false;
+			for (var v = 0;v < Agents.length;v++){
+				if(userAgentInfo.indexOf(Agents[v]) > 0){
+					flag = true;
+					break;
+				}
+			}
+			return flag;
 		}
 	}
 	var MSReset = function(MS){
